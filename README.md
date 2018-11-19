@@ -57,6 +57,14 @@ arm.motor4.PrintProfile();
 //Joystick control Mode:
 arm.JoystickControl();
   ```
+# Currently implementing 
+<br /> I am currently working on:
+* Joystick linear control
+* Teach point robot
+* Smart gripper
+* Arm avoiding
+<br />If you want other functions, please feel free to ask :)
+
 # API Description
 ### Kinematics functions
 * __void RobotArmFWD(float motorAngle[ ], float positionGripper[ ]);__
