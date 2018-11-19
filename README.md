@@ -1,7 +1,8 @@
 # LabArm C++ API
 Lab Arm is a multipurpose robotic arm. It is aim to be equiped on drone, UAV and combined with AI to achieved various task as maintenance, fruits picking...
-
-<img src="/images/armpicture.PNG" width="300">
+<p align="center">
+  <img src="/images/armpicture.PNG" width="300">
+</p>
 
 This github provide a simple c++ API to control the arm. The robotic arm use dynamixel servomotor for its 6 joints, the program was tested on a Raspberry PI 3B+, with the Dynamixel XM430 motors connected with [U2D2](http://www.robotis.us/u2d2/) (Serial-RS485).
 This API is based on the developed c++ API for the XM430 servomotor available [HERE](https://github.com/BenbenIO/XM430-cpp-API). The datasheet references for the motors can be found [HERE](http://support.robotis.com/en/product/actuator/dynamixel_x/xm_series/xm430-w350.htm#bookmark5).
@@ -56,10 +57,6 @@ arm.motor4.PrintProfile();
 //Joystick control Mode:
 arm.JoystickControl();
   ```
-  Output of the program:
-
-<img src="/images/ExampleRUN.PNG" width="450">
-
 # API Description
 ### Kinematics functions
 * __void RobotArmFWD(float motorAngle[ ], float positionGripper[ ]);__
@@ -175,4 +172,7 @@ arm.JoystickControl();
 * __int JoystickControl();__
 <br />JoystickControl: allow you to control the arm with a joystick. The control is done 1 join at the time.  (This function code is overcomplicated due to issue on reading event from the joystick (axis event oversampled))
 <br />To move a join you need to keep pressed the angle corresponding to the join (see table) and move the left joystick right or left.
-<img src="/images/joysticktable.PNG" width="250">
+
+<p align="center">
+  <img src="/images/joysticktable.PNG" width="250">
+</p>
