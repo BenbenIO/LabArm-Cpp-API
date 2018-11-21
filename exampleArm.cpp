@@ -24,10 +24,9 @@ int main()
 	arm.GoHome();
 	usleep(1000000);
 	
-	//Moving the robot with XYZ coordonate: first set the wanted position and rotation of the gripper.
-	float standbyXYZ[6] = {0, 340, 282, 10, 30, 0};
-	arm.GotoXYZ(standbyXYZ);
-	arm.ReadArmCurrent(mcurrent);
+	//Moving the robot with XYZ coordonate: create a gripper postion table {X, Y, Z, rot_X, rot_Y, rot_Z} and run GotoXYZ.
+	float wantedposition[6] = {0, 340, 282, 10, 30, 0};
+	arm.GotoXYZ(wantedposition);
 	usleep(2000000);
 	
 	//Closing the gripper.
@@ -42,6 +41,7 @@ int main()
 	//As we are using the motorMX430.h, we can also access motors function as follow:
 	arm.motor1.PrintOperatingMode();
 	arm.motor4.PrintProfile();
+	arm.gripper.PrintOperatingMode();
 	
 	//Joystick control Mode:
 	arm.JoystickControl();
