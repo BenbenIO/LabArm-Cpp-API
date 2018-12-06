@@ -1,3 +1,4 @@
+
 #include "LabArm.h"
 									
 LabArm::LabArm() : motor1(DXL1_ID, M1_MODE, M1_CURRENT_LIMIT, M1_GOAL_CURRENT), 
@@ -417,7 +418,7 @@ void LabArm::TorqueOFF()
 	}	
 }
 
-void LabArm::ReadArmCurrent( int motorCurrent[ ])
+void LabArm::ReadArmCurrent(int motorCurrent[ ])
 {
 	motorCurrent[0]=motor1.ReadCurrent();
 	motorCurrent[1]=motor2.ReadCurrent();
@@ -435,12 +436,11 @@ void LabArm::ReadAngle(float outputAngle[ ])
 	outputAngle[3] = motor4.ReadAngle();
 	outputAngle[4] = motor5.ReadAngle();
 	outputAngle[5] = motor6.ReadAngle();
-	outputAngle[6] = gripper.ReadAngle();
 	//Uncomment for debugging 
-	/*for(int a=0; a<7; a++)
+	for(int a=0; a<6; a++)
 	{
 		printf("Angle motor %d = %f (degrees)\n",a+1, outputAngle[a]); 
-	}*/
+	}
 }
 void LabArm::RunArm(float inputAngle[ ])
 {
@@ -746,6 +746,100 @@ int LabArm::GripperGetCurrent()
 	return(gripper.ReadCurrent());
 }
 
+float LabArm::GetSize()
+{
+
+	//Equation obtained by experimentation
+	if(a_gripper==0)
+	{
+		float angle = gripper.ReadAngle();
+		//printf("Measured angle : %f\n",angle);
+		float distance = -3.5364e-7*pow(angle, 4) + 2.4396e-4*pow(angle, 3) - 0.05430*pow(angle, 2) + 4.8772*angle - 154.0552;
+		return(distance);
+	}
+	else
+	{
+		printf("The gripper didn't closed");
+		return(-1);
+	}
+}
+
+float LabArm::AverageCurrent(int n)
+{
+	float current=0;
+	for(int i=0; i<n; i++)
+	{
+		current = current + motor5.ReadCurrent();
+		sleep(0.5);
+	}
+	return(current/n);
+}
+
+float LabArm::Thoughness()
+{
+	float size1 = -1, size2 = -1, deformation = -1, aveDeformation =-1;
+	for(int i=0; i<1; i++)
+	{
+		sleep(0.5);
+		size1=GetSize();
+		sleep(0.5);
+		gripper.SetGoalCurrent(400);
+		sleep(1);
+		size2=GetSize();
+		gripper.SetGoalCurrent(90);
+		deformation = abs(size1 -size2);
+		aveDeformation = aveDeformation + deformation;
+	}
+	return(aveDeformation/1);
+}
+
+float LabArm::Weight()
+{
+	//Change Operating Mode
+	/*float currentAngle=motor5.ReadAngle();
+	motor5.SetOperatingMode(5); 
+	motor5.SetGoalCurrent(500);
+	motor5.SetPID(1200, 0, 0);
+	motor5.Goto(currentAngle); */
+	usleep(500);
+	
+	//Weight position
+	float WeightPosition5[6] = {180, 90, 180, 90, 270, 180};
+	float current = 0, currentAmp=0;
+	float torque =0;
+	float weight = 0;
+	float aveWeight=0;
+	sleep(0.2);
+	Goto(WeightPosition5, 0, 40, 15);
+	
+	//Weight
+	for(int i=0;i<5;i++)
+	{
+		//printf("Motor 5: Position %f\n",motor5.ReadAngle());
+		current = AverageCurrent(10);
+		//printf("Motor 5: Current (motorUnit): %f\n",current);
+		currentAmp = 2.65e-3*current;
+		//printf("Current motor 5: %f A\n",currentAmp);
+		torque = 1.75*currentAmp+0.15;
+		//printf("Torque Motor 5: %f N.m\n", torque);
+		weight = torque / (9.8 *230e-3);
+		//printf("Calculated Weight : %f (kg)\n",weight);
+		aveWeight=aveWeight + weight;
+		sleep(1);
+	}
+	//printf("\nAveraged weight over 5 measurement: %f\n",aveWeight/5);	
+	return(aveWeight/5);
+}
+
+int LabArm::ObjectDetection()
+{
+	//Suppose the gripper is already close on the object with a goal current set at 90mA
+	
+	//Go though the trained SVM... predict(size1, abs(size1-size2))	
+	return(-1);
+}
+
+//Joystick control
 int LabArm::FindSelectedMotor(uint8_t buttonstate[ ])
 {
 	//motor from 0 to 5
@@ -761,7 +855,6 @@ int LabArm::FindSelectedMotor(uint8_t buttonstate[ ])
 	return(selectedmotor);	
 }
 	
-//Joystick control
 int LabArm::JoystickControl()
 {
 	Joystick joystick("/dev/input/js0");

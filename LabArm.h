@@ -254,6 +254,27 @@ LabArm();
 	//GripperGetCurrent: read the current inside the gripper's motor. Not used yet but can be use for object size and/or object material recognition.
 	int GripperGetCurrent();
 	
+	float GetSize();
+	//GetSize(): return the size of the gripped object based on experimental calibration
+	//Output: float size in mm.
+	
+	float AverageCurrent(int n);
+	//AverageCurrent: return the current in the motor5 averaged on N measurment. Used for weight evaluation.
+	//The float current in Motor's Unit.
+	
+	float Weight();
+	//Weight: move the arm into the weight positon and estimat the weight of the grabbed object. (This function is still underdevelopment)
+	//Output: the averaged weight of the object over 5 measurment.
+	
+	float Thoughness();
+	//Toughness: try to estimate the thoughness of the grabbed object. (This function is still underdevelopment)
+	//Output: the averaged estimated thoughness over 5 measurment.	
+	
+	int ObjectDetection();
+	//ObjectDetection: try to predict the type of grabbed object based on the size, toughness and weight though a linear SVM classifier. (This function is still underdevelopment)
+	//Output the class of the object. The function assume the object is already grabbed.
+	
+	//###################################################################  JOYSTICK FUNCTIONS
 	//FindSelectedMotor: return the id corresponding to a high state of the array buttonstate. Used in JoystickControl to find the join to move.
 	//Input: the buttonstate array contening updated state of the joystick button
 	int FindSelectedMotor(uint8_t buttonstate[ ]);
