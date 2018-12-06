@@ -11,7 +11,7 @@ This API is based on the developed c++ API for the XM430 servomotor available [H
 <br/> Lastest Update: had Blind Object Detection function and [Description](https://github.com/BenbenIO/LabArm-Cpp-API/blob/master/Blind%20Object%20Recognition%20with%20LabArm.pdf)
 
 ### Currently implementing 
-<br /> I am currently working on:
+I am currently working on:
 * Joystick linear control
 * Teach point robot
 * [Blind Object Detection](https://github.com/BenbenIO/LabArm-Cpp-API/blob/master/Blind%20Object%20Recognition%20with%20LabArm.pdf)
