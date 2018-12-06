@@ -7,7 +7,16 @@ Lab Arm is a multipurpose robotic arm. It is aim to be equiped on drone, UAV and
 This github provide a simple c++ API to control the arm. The robotic arm use dynamixel servomotor for its 6 joints, the program was tested on a Raspberry PI 3B+, with the Dynamixel XM430 motors connected with [U2D2](http://www.robotis.us/u2d2/) (Serial-RS485).
 This API is based on the developed c++ API for the XM430 servomotor available [HERE](https://github.com/BenbenIO/XM430-cpp-API). All the motors are using protocol 2 and a baudrate of 57600. The datasheet references for the motors can be found [HERE](http://support.robotis.com/en/product/actuator/dynamixel_x/xm_series/xm430-w350.htm#bookmark5).
 <br />If you are looking for a python version, please go to the following link : (https://github.com/rasheeddo/LabRobotArmOfficial)
-<br /> **Any resquest (new function to add) or issue report are very welcomed**
+### Any resquest (new function to add) or issue report are very welcomed
+<br/> Lastest Update: had Blind Object Detection function and [Description](https://github.com/BenbenIO/LabArm-Cpp-API/blob/master/Blind%20Object%20Recognition%20with%20LabArm.pdf)
+
+### Currently implementing 
+<br /> I am currently working on:
+* Joystick linear control
+* Teach point robot
+* [Blind Object Detection](https://github.com/BenbenIO/LabArm-Cpp-API/blob/master/Blind%20Object%20Recognition%20with%20LabArm.pdf)
+* Arm avoiding
+<br />If you want other functions, please feel free to ask :)
 
 # Install && Dependencies
 The programme depend on the dynamixel_sdk library. Installation information can be found on their [github](https://github.com/ROBOTIS-GIT/DynamixelSDK). If you want to use a raspberry Pi please build and intall the SingleBoard Computer version (linux_sbc). For Joystick control, we based our function on [A minimal C++ object-oriented API onto joystick devices under Linux](https://github.com/drewnoakes/joystick), but the library is available on this repository.
@@ -57,14 +66,6 @@ arm.gripper.PrintOperatingMode();
 //Joystick control Mode:
 arm.JoystickControl();
   ```
-# Currently implementing 
-<br /> I am currently working on:
-* Joystick linear control
-* Teach point robot
-* Smart gripper
-* Arm avoiding
-<br />If you want other functions, please feel free to ask :)
-
 # API Description
 ### Kinematics functions
 * __void RobotArmFWD(float motorAngle[ ], float positionGripper[ ]);__
@@ -142,6 +143,7 @@ arm.JoystickControl();
 * __void Goto(float goalPosition[ ], int generateTrajectory, uint32_t Vstd, uint32_t Astd);__
 <br />Goto: make the arm go to the wanted position. If generateTrajectory is 1, the generated movement will be smooth, if generateTrajectory is 0, all the motors will have the same profile (Vstd, Astd)
 <br />Input: the goal position array[6] containing the wanted position of the 6 motors, the option for smooth movement, the standart profile for the motors.
+<br/>Example: Goto(SavedPosition, 1, 40, 20) (a profile of 40, 20 is standard)
 	
 * __int WorkSpaceLimitation(float X, float Y, float Z);__
 <br />WorkSpaceLimitation: check if the wanted X,Y,Z position are in the working space of the arm. The workingspace parameter are fixed in the #define section
@@ -171,6 +173,26 @@ arm.JoystickControl();
 	
 * __int GripperGetCurrent();__
 <br />GripperGetCurrent: read the current inside the gripper's motor. Not used yet but can be use for object size and/or object material recognition.
+
+* __float GetSize();__
+<br/> GetSize(): return the size of the gripped object based on experimental calibration
+<br/> Output: float size in mm.
+	
+* __float AverageCurrent(int n);__
+<br /> AverageCurrent: return the current in the motor5 averaged on N measurment. Used for weight evaluation.
+<br/> The float current in Motor's Unit.
+	
+* __float Weight();__
+<br/>Weight: move the arm into the weight positon and estimat the weight of the grabbed object. (This function is still underdevelopment)
+<br/>Output: the averaged weight of the object over 5 measurment.
+	
+* __float Thoughness();__
+<br/>Toughness: try to estimate the thoughness of the grabbed object. (This function is still underdevelopment)
+<br/>Output: the averaged estimated thoughness over 5 measurment.	
+	
+* __int ObjectDetection();__
+<br/> ObjectDetection: try to predict the type of grabbed object based on the size, toughness and weight though a linear SVM classifier. (This function is still underdevelopment)
+<br/> Output the class of the object. The function assume the object is already grabbed.
 	
 ### Joystick control
 * __int FindSelectedMotor(uint8_t buttonstate[ ]);__
