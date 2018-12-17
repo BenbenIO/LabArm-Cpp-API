@@ -831,14 +831,6 @@ float LabArm::Weight()
 	return(aveWeight/5);
 }
 
-int LabArm::ObjectDetection()
-{
-	//Suppose the gripper is already close on the object with a goal current set at 90mA
-	
-	//Go though the trained SVM... predict(size1, abs(size1-size2))	
-	return(-1);
-}
-
 //Joystick control
 int LabArm::FindSelectedMotor(uint8_t buttonstate[ ])
 {
