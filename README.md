@@ -8,13 +8,13 @@ This github provide a simple c++ API to control the arm. The robotic arm use dyn
 This API is based on the developed c++ API for the XM430 servomotor available [HERE](https://github.com/BenbenIO/XM430-cpp-API). All the motors are using protocol 2 and a baudrate of 57600. The datasheet references for the motors can be found [HERE](http://support.robotis.com/en/product/actuator/dynamixel_x/xm_series/xm430-w350.htm#bookmark5).
 <br />If you are looking for a python version, please go to the following link : (https://github.com/rasheeddo/LabRobotArmOfficial)
 ### Any resquest (new function to add) or issue report are very welcomed
-<br/> Lastest Update: created a dedicated branch for blind object classification [Description](https://github.com/BenbenIO/LabArm-Cpp-API/blob/master/Blind%20Object%20Recognition%20with%20LabArm.pdf)
+<br/> Lastest Update: Created a separated github for the  blind object classification [Description](https://github.com/BenbenIO/LabArm-Blind_Object_Classification), and so I deleted some of the related function. Note that you can still use the size-deformation-weight function but their are maybe depreciated now.
 
 ### Currently implementing 
 I am currently working on:
 * Joystick linear control
 * Teach point robot
-* [Blind Object Detection](https://github.com/BenbenIO/LabArm-Cpp-API/blob/master/Blind%20Object%20Recognition%20with%20LabArm.pdf)
+* [Blind Object Detection](https://github.com/BenbenIO/LabArm-Blind_Object_Classification)
 * Arm avoiding
 <br />If you want other functions, please feel free to ask :)
 
