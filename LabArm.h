@@ -270,10 +270,6 @@ LabArm();
 	//Toughness: try to estimate the thoughness of the grabbed object. (This function is still underdevelopment)
 	//Output: the averaged estimated thoughness over 5 measurment.	
 	
-	int ObjectDetection();
-	//ObjectDetection: try to predict the type of grabbed object based on the size, toughness and weight though a linear SVM classifier. (This function is still underdevelopment)
-	//Output the class of the object. The function assume the object is already grabbed.
-	
 	//###################################################################  JOYSTICK FUNCTIONS
 	//FindSelectedMotor: return the id corresponding to a high state of the array buttonstate. Used in JoystickControl to find the join to move.
 	//Input: the buttonstate array contening updated state of the joystick button
