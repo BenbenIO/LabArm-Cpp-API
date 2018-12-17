@@ -1,4 +1,4 @@
-# LabArm C++ API
+# LabArm C++ - API
 Lab Arm is a multipurpose robotic arm. It is aim to be equiped on drone, UAV and combined with AI to achieved various task as maintenance, fruits picking...
 <p align="center">
   <img src="/images/armpicture.PNG" width="300">
@@ -8,7 +8,7 @@ This github provide a simple c++ API to control the arm. The robotic arm use dyn
 This API is based on the developed c++ API for the XM430 servomotor available [HERE](https://github.com/BenbenIO/XM430-cpp-API). All the motors are using protocol 2 and a baudrate of 57600. The datasheet references for the motors can be found [HERE](http://support.robotis.com/en/product/actuator/dynamixel_x/xm_series/xm430-w350.htm#bookmark5).
 <br />If you are looking for a python version, please go to the following link : (https://github.com/rasheeddo/LabRobotArmOfficial)
 ### Any resquest (new function to add) or issue report are very welcomed
-<br/> Lastest Update: had Blind Object Detection function and [Description](https://github.com/BenbenIO/LabArm-Cpp-API/blob/master/Blind%20Object%20Recognition%20with%20LabArm.pdf)
+<br/> Lastest Update: created a dedicated branch for blind object classification [Description](https://github.com/BenbenIO/LabArm-Cpp-API/blob/master/Blind%20Object%20Recognition%20with%20LabArm.pdf)
 
 ### Currently implementing 
 I am currently working on:
@@ -189,11 +189,7 @@ arm.JoystickControl();
 * __float Thoughness();__
 <br/>Toughness: try to estimate the thoughness of the grabbed object. (This function is still underdevelopment)
 <br/>Output: the averaged estimated thoughness over 5 measurment.	
-	
-* __int ObjectDetection();__
-<br/> ObjectDetection: try to predict the type of grabbed object based on the size, toughness and weight though a linear SVM classifier. (This function is still underdevelopment)
-<br/> Output the class of the object. The function assume the object is already grabbed.
-	
+		
 ### Joystick control
 * __int FindSelectedMotor(uint8_t buttonstate[ ]);__
 <br />FindSelectedMotor: return the id corresponding to a high state of the array buttonstate. Used in JoystickControl to find the join to move.
