@@ -282,8 +282,8 @@ void LabArm::armINV(float wantedXYZ[ ], float outputMotorAngle[ ])  //Output in 
 	double X1[2] = {0,0};
 	Solve(A0, B, X0);
 	Solve(A1, B1, X1);
-	double q2_1 = atan2(X0[1], X1[1]);
-	double q2_2 = atan2(X0[0], X1[0]);
+	double q2_1 = atan2(X0[1], X0[0]);
+	double q2_2 = atan2(X1[1], X1[0]);
 	double deg2[2] = {q2_1*RAD2DEG, q2_2*RAD2DEG};
 	//Find q5:
 	double r33[2] = { (wx*cos(q1)*sin(q2_1+q3_1) + wy*sin(q1)*sin(q2_1+q3_1) - wz*cos(q2_1+q3_1)),
@@ -294,7 +294,7 @@ void LabArm::armINV(float wantedXYZ[ ], float outputMotorAngle[ ])  //Output in 
 	//Find q4:
 	double q4_1=0;
 	double q4_2 = 0;
-	if(abs(r33[1]))
+	if(abs(r33[1])<1)
 	{
 		double cq4_1= (  wx*cos(q1)*cos(q2_1+q3_1) + wy*sin(q1)*cos(q2_1+q3_1) + wz*sin(q2_1+q3_1) ) / sin(q5_1);
 		double cq4_2 = (  wx*cos(q1)*cos(q2_2+q3_2) + wy*sin(q1)*cos(q2_2+q3_2) + wz*sin(q2_2+q3_2) ) / sin(q5_2);
@@ -310,13 +310,13 @@ void LabArm::armINV(float wantedXYZ[ ], float outputMotorAngle[ ])  //Output in 
 	}
 	else
 	{
-		printf("Configuration physically imposible -> software error\n");
+		printf("R33 Configuration physically imposible -> software error\n");
 	}
 	double deg4[2] = { q4_1*RAD2DEG, q4_2*RAD2DEG};
 	//Find q6:
 	double q6_1=0;
 	double q6_2 = 0;
-	if(abs(r33[1]))
+	if(abs(r33[1])<1)
 	{
 		double cq6_1 = -(ux*cos(q1)*sin(q2_1+q3_1) + uy*sin(q1)*sin(q2_1+q3_1) - uz*cos(q2_1+q3_1) ) / sin(q5_1);
 		double cq6_2 = -(ux*cos(q1)*sin(q2_2+q3_2) + uy*sin(q1)*sin(q2_2+q3_2) - uz*cos(q2_2+q3_2) ) / sin(q5_2);
@@ -332,7 +332,7 @@ void LabArm::armINV(float wantedXYZ[ ], float outputMotorAngle[ ])  //Output in 
 	}
 	else
 	{
-		printf("Configuration physically imposible -> software error\n");
+		printf("abs(R33) Configuration physically imposible -> software error\n");
 	}
 	double deg6[2] = { q6_1*RAD2DEG, q6_2*RAD2DEG};
 	
@@ -439,7 +439,7 @@ void LabArm::ReadAngle(float outputAngle[ ])
 	//Uncomment for debugging 
 	for(int a=0; a<6; a++)
 	{
-		printf("Angle motor %d = %f (degrees)\n",a+1, outputAngle[a]); 
+		//printf("Angle motor %d = %f (degrees)\n",a+1, outputAngle[a]); 
 	}
 }
 void LabArm::RunArm(float inputAngle[ ])
@@ -829,6 +829,14 @@ float LabArm::Weight()
 	}
 	//printf("\nAveraged weight over 5 measurement: %f\n",aveWeight/5);	
 	return(aveWeight/5);
+}
+
+int LabArm::ObjectDetection()
+{
+	//Suppose the gripper is already close on the object with a goal current set at 90mA
+	
+	//Go though the trained SVM... predict(size1, abs(size1-size2))	
+	return(-1);
 }
 
 //Joystick control
