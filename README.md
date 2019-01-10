@@ -8,7 +8,7 @@ This github provide a simple c++ API to control the arm. The robotic arm use dyn
 This API is based on the developed c++ API for the XM430 servomotor available [HERE](https://github.com/BenbenIO/XM430-cpp-API). All the motors are using protocol 2 and a baudrate of 57600. The datasheet references for the motors can be found [HERE](http://support.robotis.com/en/product/actuator/dynamixel_x/xm_series/xm430-w350.htm#bookmark5).
 <br />If you are looking for a python version, please go to the following link : (https://github.com/rasheeddo/LabRobotArmOfficial)
 ### Any resquest (new function to add) or issue report are very welcomed
-<br/> Lastest Update: Add information for installing this library on Ubuntu.
+<br/> Lastest Update: Improve Mafefile for ubuntu (x86_64) and Raspberry3 (armv7l), fixed GotoXYZ function.
 
 ### Currently implementing 
 I am currently working on:
