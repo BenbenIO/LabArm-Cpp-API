@@ -20,10 +20,10 @@ TARGET      =  exampleArm
 DIR_DXL    = ../
 DIR_OBJS   = .objects
 
-# Get host architecture, set the correct Dynamixel library, and compiler option
+# Get platform architecture, set the correct Dynamixel library, and compiler option
 ARCH :=$(shell arch)
-ifeq ($(ARCH),armv71)
-	DYNAMIXEL = -ldxl_sbc_cpp
+ifeq ($(ARCH),armv7l)
+	LIBRARIES = -ldxl_sbc_cpp
 	CCFLAGS   = -O2 -O3 -DLINUX -D_GNU_SOURCE -Wall $(INCLUDES) -g
 	CXFLAGS   = -O2 -O3 -DLINUX -D_GNU_SOURCE -Wall $(INCLUDES) -g
 	INCLUDES += -I$(DIR_DXL)/include/dynamixel_sdk_raspberry
@@ -47,10 +47,6 @@ LNKFLAGS    = $(CXFLAGS)
 # Core components 
 #---------------------------------------------------------------------
 LIBRARIES  += -lrt
-REALSENSE = -lrealsense2
-OPENCV = -lopencv_core -lopencv_imgproc -lopencv_highgui -lopencv_dnn
-LIBRARIES += $(REALSENSE)
-LIBRARIES += $(OPENCV)
 
 #---------------------------------------------------------------------
 # Source files
