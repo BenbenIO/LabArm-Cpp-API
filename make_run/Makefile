@@ -4,7 +4,7 @@
 ##################################################
 
 #---------------------------------------------------------------------
-# Makefile template inspired by the Dynamixel Makefile
+# Makefile template inspired by the original Dynamixel Makefile
 #
 # This Makefile will set the compiler option for a x86_64 (Ubuntu) or armv71 (Raspberry 3)
 # Add additionnal library (OPENCV, ...) with the LIBRARIES variable
@@ -23,17 +23,17 @@ DIR_OBJS   = .objects
 # Get platform architecture, set the correct Dynamixel library, and compiler option
 ARCH :=$(shell arch)
 ifeq ($(ARCH),armv7l)
-	LIBRARIES = -ldxl_sbc_cpp
+	LIBRARIES += -ldxl_sbc_cpp
 	CCFLAGS   = -O2 -O3 -DLINUX -D_GNU_SOURCE -Wall $(INCLUDES) -g
 	CXFLAGS   = -O2 -O3 -DLINUX -D_GNU_SOURCE -Wall $(INCLUDES) -g
-	INCLUDES += -I$(DIR_DXL)/include/dynamixel_sdk_raspberry
+	INCLUDES  += -I$(DIR_DXL)/include/dynamixel_sdk_raspberry
 endif
 
 ifeq ($(ARCH),x86_64)
-	LIBRARIES  += -ldxl_x64_cpp
+	LIBRARIES   += -ldxl_x64_cpp
 	CCFLAGS     = -std=c++11 -O2 -O3 -DLINUX -D_GNU_SOURCE -Wall $(INCLUDES) $(FORMAT) -g
 	CXFLAGS     = -std=c++11 -O2 -O3 -DLINUX -D_GNU_SOURCE -Wall $(INCLUDES) $(FORMAT) -g
-	INCLUDES   += -I$(DIR_DXL)/include/dynamixel_sdk_ubuntu
+	INCLUDES    += -I$(DIR_DXL)/include/dynamixel_sdk_ubuntu
 	FORMAT      = -m64
 endif
 	
@@ -56,8 +56,9 @@ SOURCES += motorMX430.cpp
 SOURCES += joystick.cpp
 SOURCES += LabArm.cpp
 
-    # *** OTHER SOURCES GO HERE ***
-
+#---------------------------------------------------------------------
+# Object recipe
+#---------------------------------------------------------------------
 OBJECTS  = $(addsuffix .o,$(addprefix $(DIR_OBJS)/,$(basename $(notdir $(SOURCES)))))
 
 #---------------------------------------------------------------------
