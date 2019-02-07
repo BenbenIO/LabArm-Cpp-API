@@ -8,104 +8,108 @@
 
 // Parameter for the different motors:   (ref. LabRobotArmOfficial (python))
 //Motor 1:
-#define DXL1_ID							1
-#define M1_HOME_1						278.85
-#define M1_HOME_2						285.45
-#define M1_MODE						3
-#define M1_CURRENT_LIMIT				800
+#define DXL1_ID					1
+#define M1_HOME_1				278.85
+#define M1_HOME_2				285.45
+#define M1_MODE					3
+#define M1_CURRENT_LIMIT			800
 #define M1_GOAL_CURRENT				150
 #define M1_PID_MODE5_P				800
-#define M1_PID_MODE5_I					100
+#define M1_PID_MODE5_I				100
 #define M1_PID_MODE5_D				9000
 //Motor 2:
-#define DXL2_ID							2
-#define M2_HOME_1						194.63
-#define M2_HOME_2						175.47
-#define M2_MODE						3
-#define M2_CURRENT_LIMIT				1000
+#define DXL2_ID					2
+#define M2_HOME_1				194.63
+#define M2_HOME_2				175.47
+#define M2_MODE					3
+#define M2_CURRENT_LIMIT			1000
 #define M2_GOAL_CURRENT				800
 #define M2_PID_MODE5_P				800
-#define M2_PID_MODE5_I					100
+#define M2_PID_MODE5_I				100
 #define M2_PID_MODE5_D				9000
 //Motor 3
-#define DXL3_ID							3
-#define M3_HOME_1						155.69
-#define M3_HOME_2						103.82
-#define M3_MODE						3
-#define M3_CURRENT_LIMIT				800
+#define DXL3_ID					3
+#define M3_HOME_1				155.69
+#define M3_HOME_2				103.82
+#define M3_MODE					3
+#define M3_CURRENT_LIMIT			800
 #define M3_GOAL_CURRENT				250
 #define M3_PID_MODE5_P				800
-#define M3_PID_MODE5_I					100
+#define M3_PID_MODE5_I				100
 #define M3_PID_MODE5_D				9000
 //Motor 4
-#define DXL4_ID							4
-#define M4_HOME_1						183.48
-#define M4_HOME_2						195.48
-#define M4_MODE						3
-#define M4_CURRENT_LIMIT				800
+#define DXL4_ID					4
+#define M4_HOME_1				183.48
+#define M4_HOME_2				195.48
+#define M4_MODE					3
+#define M4_CURRENT_LIMIT			800
 #define M4_GOAL_CURRENT				150
 #define M4_PID_MODE5_P				800
-#define M4_PID_MODE5_I					50
+#define M4_PID_MODE5_I				50
 #define M4_PID_MODE5_D				7000
 //Motor 5
-#define DXL5_ID							5
-#define M5_HOME_1						103.03
-#define M5_HOME_2						174.41
-#define M5_MODE						3
-#define M5_CURRENT_LIMIT				800
+#define DXL5_ID					5
+#define M5_HOME_1				103.03
+#define M5_HOME_2				174.41
+#define M5_MODE					3
+#define M5_CURRENT_LIMIT			800
 #define M5_GOAL_CURRENT				250
 #define M5_PID_MODE5_P				800
-#define M5_PID_MODE5_I					50
+#define M5_PID_MODE5_I				50
 #define M5_PID_MODE5_D				7000
 //Motor 6
-#define DXL6_ID							6
-#define M6_HOME_1						198.89
-#define M6_HOME_2						178.89
-#define M6_MODE						3
-#define M6_CURRENT_LIMIT				800
+#define DXL6_ID					6
+#define M6_HOME_1				198.89
+#define M6_HOME_2				178.89
+#define M6_MODE					3
+#define M6_CURRENT_LIMIT			800
 #define M6_GOAL_CURRENT				150
 #define M6_PID_MODE5_P				800
-#define M6_PID_MODE5_I					50
+#define M6_PID_MODE5_I				50
 #define M6_PID_MODE5_D				7000
 //Gripper
-#define DXL7_ID							7
+#define DXL7_ID					7
 #define GRIPPER_HOME_1				150 		
-#define GRIPPER_OPEN					297
-#define GRIPPER_CLOSE					171
-#define GRIPPER_MODE					5			
+#define GRIPPER_OPEN				297
+#define GRIPPER_CLOSE				171
+#define GRIPPER_MODE				5			
 #define GRIPPER_CURRENT_LIMIT			800
 #define GRIPPER_GOAL_CURRENT			90
-#define GRIPPER_PID_P					2000
-#define GRIPPER_PID_I					30
-#define GRIPPER_PID_D					2000
-#define GRIPPER_ASTD					60
-#define GRIPPER_VSTD					200
+#define GRIPPER_PID_P				2000
+#define GRIPPER_PID_I				30
+#define GRIPPER_PID_D				2000
+#define GRIPPER_ASTD				60
+#define GRIPPER_VSTD				200
 //Motors global parameters
-#define PID_MODE3_P					1500
-#define PID_MODE3_I						100
-#define PID_MODE3_D					4000
-#define FFGAIN_MODE3_1st				100
-#define FFGAIN_MODE3_2nd				50
-#define FFGAIN_MODE5_1st				300
-#define FFGAIN_MODE5_2nd				50
+#define PID_MODE3_P				1500
+#define PID_MODE3_I				100
+#define PID_MODE3_D				4000
+#define FFGAIN_MODE3_1st			100
+#define FFGAIN_MODE3_2nd			50
+#define FFGAIN_MODE5_1st			300
+#define FFGAIN_MODE5_2nd			50
 //Workspace limitations
-#define RMAX							560.0
-#define R2MAX							75.0
-#define HMAX							-200.0
-#define HL_YMAX						450.0     //HL: Horizontal Limitation
-#define HL_YMIN							230
-#define HL_ZMIN_INNER					74.0
-#define HL_ZMAX_INNER					380.0
-#define HL_ZMIN_OUTER					0.0
-#define HL_MAX_OUTER					250.0
+#define RMAX					600.0  //full extended raduis
+#define R2MAX					75.0  //innner raduis, not to hit it self
+#define HMAX					-200.0  // maybe change when on rover
+#define HL_YMAX					450.0     //HL: Horizontal Limitation
+#define HL_YMIN					230
+#define HL_ZMIN_INNER				74.0
+#define HL_ZMAX_INNER				380.0
+#define HL_ZMIN_OUTER				0.0
+#define HL_MAX_OUTER				250.0
 //Set profile to slow
-#define V_SLOW							40
-#define A_SLOW							8 
+#define V_SLOW					40
+#define A_SLOW					8 
 //Constant
-#define DEG2RAD						0.01745
-#define RAD2DEG						57.2957
-#define AXISMAXVALUE					32767.0
+#define DEG2RAD					0.01745
+#define RAD2DEG					57.2957
+#define AXISMAXVALUE				32767.0
 								
+// Update 2019/02/08
+#define DEFAULT_TIMEACC				500 //ms
+#define DEFAULT_TIMESPAN			2000
+
 class LabArm
 {
 public:
@@ -220,13 +224,13 @@ LabArm();
 	//Output: the array index corresponding to the bigges deltaposition.
 	int FindMaxDelta(int deltaPosition[ ]);
 	
-	//TrajectoryGeneration: set all motor's profile (velocity/acceleration) based on the current and goal position. Used to generata smooth movement of the arm.
+	//TimeProfileGeneration: set the timeprofile of the arm. Used to time the smooth movement of the arm. Currently constant, but maybe implemented as prop of total angular distance
 	//Input: the goal position array[6] containing the wanted position of the 6 motors, the based velocity-acceleration for each motors
-	void TrajectoryGeneration(float goalPosition[ ], float Vstd, float Astd);
-	
+	void TimeProfileGeneration(float goalPosition[ ], uint32_t stdTa, uint32_t stdTf);
+
 	//Goto: make the arm go to the wanted position. If generateTrajectory is 1, the generated movement will be smooth, if generateTrajectory is 0, all the motors will have the same profile (Vstd, Astd)
 	//Input: the goal position array[6] containing the wanted position of the 6 motors, the option for smooth movement, the standart profile for the motors.
-	void Goto(float goalPosition[ ], int generateTrajectory, uint32_t Vstd, uint32_t Astd);
+	void Goto(float goalPosition[ ],  uint32_t stdTa, uint32_t stdTf);
 	
 	//WorkSpaceLimitation: check if the wanted X,Y,Z position are in the working space of the arm. The workingspace parameter are fixed in the #define section
 	//Ouput: return 0: XYZ are in the working space /  return 1: out of work range in quadrant 2 or 3 / return 2:  Z is lower than the lowest range HMAX / return 3: // Y, Z axe is negatif / return4: X,Y,Z point is not in not in the workspace

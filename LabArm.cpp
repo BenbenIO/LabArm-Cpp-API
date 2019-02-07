@@ -1,4 +1,3 @@
-
 #include "LabArm.h"
 									
 LabArm::LabArm() : motor1(DXL1_ID, M1_MODE, M1_CURRENT_LIMIT, M1_GOAL_CURRENT), 
@@ -30,7 +29,7 @@ LabArm::LabArm() : motor1(DXL1_ID, M1_MODE, M1_CURRENT_LIMIT, M1_GOAL_CURRENT),
 	alph5=M_PI/2.0;
 
 	a6=0.0;
-	d6=200.0;
+	d6=230.0;
 	alph6=0.0;
 
 	//Set other arm parameters:
@@ -352,6 +351,7 @@ void LabArm::MotorsInit(int mode)
 	{
 		case 3:
 			//Set same PID for every one
+			printf("Setting mode 3\n");
 			motor1.SetPID(PID_MODE3_P, PID_MODE3_I, PID_MODE3_D);
 			motor1.SetFFGain(FFGAIN_MODE3_1st, FFGAIN_MODE3_2nd);
 			motor2.SetPID(PID_MODE3_P, PID_MODE3_I, PID_MODE3_D);
@@ -367,6 +367,7 @@ void LabArm::MotorsInit(int mode)
 			break;
 		case 5:
 			//Set specific PID for each motors
+			printf("Setting mode 5\n");
 			motor1.SetPID(M1_PID_MODE5_P, M1_PID_MODE5_I, M1_PID_MODE5_D);
 			motor1.SetFFGain(FFGAIN_MODE5_1st, FFGAIN_MODE5_2nd);
 			motor2.SetPID(M2_PID_MODE5_P, M2_PID_MODE5_I, M2_PID_MODE5_D);
@@ -462,9 +463,9 @@ void LabArm::RunArm(float inputAngle[ ])
 void LabArm::GoHome()
 {
 	//GoHOME in 2 steps
-	TrajectoryGeneration(Home1, 40, 15);
+	TimeProfileGeneration(Home1, DEFAULT_TIMEACC, DEFAULT_TIMESPAN);
 	RunArm(Home1);
-	TrajectoryGeneration(Home2, 40, 15);
+	TimeProfileGeneration(Home2, DEFAULT_TIMEACC, DEFAULT_TIMESPAN);
 	GripperOpen();
 	RunArm(Home2);
 	a_state  = 0;
@@ -479,9 +480,9 @@ void LabArm::Awake()
 	{
 		TorqueON();
 		//Move to Awake (home 2 -> 1)
-		TrajectoryGeneration(Home2, 40, 15);
+		TimeProfileGeneration(Home2, DEFAULT_TIMEACC, DEFAULT_TIMESPAN);
 		RunArm(Home2);
-		TrajectoryGeneration(Home1, 40, 15);
+		TimeProfileGeneration(Home1, DEFAULT_TIMEACC, DEFAULT_TIMESPAN);
 		RunArm(Home1);
 		a_state = 1;
 	}
@@ -490,7 +491,7 @@ void LabArm::StandBy()
 {
 	Awake();
 	float StandbyPos[6] = { 180, 180, 180, 180, 180, 180};
-	TrajectoryGeneration(StandbyPos, 40, 15);
+	TimeProfileGeneration(StandbyPos, DEFAULT_TIMEACC, DEFAULT_TIMESPAN);
 	RunArm(StandbyPos);
 	a_state = 2;
 }
@@ -524,62 +525,33 @@ int LabArm::FindMaxDelta(int deltaPosition[ ])
 	return(indexMax);
 }
 
-void LabArm::TrajectoryGeneration(float goalPosition[ ], float Vstd, float Astd) //Set profile (V-A) of each motors based on the difference between the goal and current position
+void LabArm::TimeProfileGeneration(float goalPosition[ ], uint32_t stdTa, uint32_t stdTf)
 {
 	float angleMotor[7];
 	ReadAngle(angleMotor);
 	int deltaPosition[6];
-	int maxID=0;
-	uint32_t Vsm[6], Asm[6];
 	//Calcul the delta position:
 	for(int motor = 0; motor < 6; motor++)
 	{
 		deltaPosition[motor] = DeltaPosition(angleMotor[motor], goalPosition[motor]);
 	}
 	//Find the bigger delta position and set as reference:
-	maxID=FindMaxDelta(deltaPosition);
-	float t3_std = (64.0*Vstd / Astd) + (64.0*deltaPosition[maxID] / Vstd);
-	float t2_std = 64.0*deltaPosition[maxID] / Vstd;
-	float den_std = (t3_std - t2_std);
-	//Calcul the proportional profile for each motors:
-	for(int motor=0; motor<6; motor++)
-	{
-		if(motor==maxID)
-		{
-			Vsm[motor] = Vstd;
-			Asm[motor] = Astd;
-		}
-		else
-		{
-			Vsm[motor] = 64.0*deltaPosition[motor] / t2_std;
-			Asm[motor] = 64.0*Vsm[motor] / den_std; 	
-		}
-	}
+	int maxID = FindMaxDelta(deltaPosition);
+
 	//Set the profile:
-	motor1.SetProfile(Vsm[0], Asm[0]);
-	motor2.SetProfile(Vsm[1], Asm[1]);
-	motor3.SetProfile(Vsm[2], Asm[2]);
-	motor4.SetProfile(Vsm[3], Asm[3]);
-	motor5.SetProfile(Vsm[4], Asm[4]);
-	motor6.SetProfile(Vsm[5], Asm[5]);
+	motor1.SetTimeProfile(stdTa, stdTf);
+	motor2.SetTimeProfile(stdTa, stdTf);
+	motor3.SetTimeProfile(stdTa, stdTf);
+	motor4.SetTimeProfile(stdTa, stdTf);
+	motor5.SetTimeProfile(stdTa, stdTf);
+	motor6.SetTimeProfile(stdTa, stdTf);
 }
-void LabArm::Goto(float goalPosition[ ], int generateTrajectory, uint32_t Vstd, uint32_t Astd)   //Goto a wanted position, generateTrajectory option generate profiles for each motor for a smooth movement, if 0 all motor will have the same profile
+
+void LabArm::Goto(float goalPosition[ ], uint32_t stdTa, uint32_t stdTf) 
 {
 	Awake();
-	if(generateTrajectory == 1)
-	{
-		printf("Generate trajectory\n");
-		TrajectoryGeneration(goalPosition, Vstd, Astd);
-	}	
-	else
-	{
-		motor1.SetProfile(Vstd, Astd);
-		motor2.SetProfile(Vstd, Astd);
-		motor3.SetProfile(Vstd, Astd);
-		motor4.SetProfile(Vstd, Astd);
-		motor5.SetProfile(Vstd, Astd);
-		motor6.SetProfile(Vstd, Astd);
-	}
+	//Update: 2019/02/08
+	TimeProfileGeneration(goalPosition, stdTa, stdTf);
 	RunArm(goalPosition);
 }
 
@@ -684,7 +656,11 @@ void LabArm::GotoXYZ(float wantedXYZ[ ])
 	if(checkWS==0)
 	{
 		armINV(wantedXYZ, inputMotorAngle);
-		Goto(inputMotorAngle, 1, 40, 15);
+		for(int a=0; a<6; a++)
+		{
+			printf("Goal angle motor %d: %f\n", a, inputMotorAngle[a]);
+		}
+		Goto(inputMotorAngle, DEFAULT_TIMEACC, DEFAULT_TIMESPAN);
 	}
 	else
 	{
@@ -810,10 +786,10 @@ float LabArm::Weight()
 	float weight = 0;
 	float aveWeight=0;
 	sleep(0.2);
-	Goto(WeightPosition5, 0, 40, 15);
+	Goto(WeightPosition5, DEFAULT_TIMEACC, DEFAULT_TIMESPAN);
 	
 	//Weight
-	for(int i=0;i<5;i++)
+	for(int i=0;i<3;i++)
 	{
 		//printf("Motor 5: Position %f\n",motor5.ReadAngle());
 		current = AverageCurrent(10);
@@ -827,8 +803,8 @@ float LabArm::Weight()
 		aveWeight=aveWeight + weight;
 		sleep(1);
 	}
-	//printf("\nAveraged weight over 5 measurement: %f\n",aveWeight/5);	
-	return(aveWeight/5);
+	printf("\nAveraged weight over 5 measurement: %f\n",aveWeight/3);	
+	return(aveWeight/3);
 }
 
 int LabArm::ObjectDetection()
