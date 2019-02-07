@@ -40,7 +40,6 @@ int main()
 	
 	//As we are using the motorMX430.h, we can also access motors function as follow:
 	arm.motor1.PrintOperatingMode();
-	arm.motor4.PrintProfile();
 	arm.gripper.PrintOperatingMode();
 	
 	//Joystick control Mode:
