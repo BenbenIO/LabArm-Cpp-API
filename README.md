@@ -8,7 +8,7 @@ This github provide a simple c++ API to control the arm. The robotic arm use dyn
 This API is based on the developed c++ API for the XM430 servomotor available [HERE](https://github.com/BenbenIO/XM430-cpp-API). All the motors are using protocol 2 and a baudrate of 57600. The datasheet references for the motors can be found [HERE](http://support.robotis.com/en/product/actuator/dynamixel_x/xm_series/xm430-w350.htm#bookmark5).
 <br />If you are looking for a python version, please go to the following link : (https://github.com/rasheeddo/LabRobotArmOfficial)
 ### Any resquest (new function to add) or issue report are very welcomed
-<br/> Lastest Update: Improve Mafefile for ubuntu (x86_64) and Raspberry3 (armv7l), fixed GotoXYZ function.
+<br/> Lastest Update: Switch to TIME_BASED driving mode. This allow to set a deadline on the motor displacement. 
 
 ### Currently implementing 
 I am currently working on:
@@ -20,6 +20,7 @@ I am currently working on:
 
 # Install && Dependencies
 The programme depend on the dynamixel_sdk library. Installation information can be found on their [github](https://github.com/ROBOTIS-GIT/DynamixelSDK). Please install the proper library depending on your platform.
+<br /> On Ubuntu, you may need to do a _sudo chmod a+rw /dev/ttyUSB0_
 
 <br /> For Joystick control, we based our function on [A minimal C++ object-oriented API onto joystick devices under Linux](https://github.com/drewnoakes/joystick), but the library is available on this repository.
 
@@ -46,7 +47,7 @@ printf("\nArm go to Standby position: \n");
 arm.StandBy();	
 printf("\nArm go to Home position\n");
 arm.GoHome();
-usleep(1000000);
+sleep(1);
 	
 //Moving the robot with XYZ coordonate: create a gripper postion table {X, Y, Z, rot_X, rot_Y, rot_Z} and run GotoXYZ.
 float wantedposition[6] = {0, 340, 282, 10, 30, 0};
@@ -54,7 +55,7 @@ arm.GotoXYZ(wantedposition);
   
 //Closing the gripper.
 arm.GripperClose();
-usleep(2000000);
+sleep(2);
 	
 //Going back home and disactivate the torque
 arm.GoHome();
@@ -63,7 +64,6 @@ arm.GripperOFF();
 	
 //As we are using the motorMX430.h, we can also access motors function as follow:
 arm.motor1.PrintOperatingMode();
-arm.motor4.PrintProfile();
 arm.gripper.PrintOperatingMode();
 	
 //Joystick control Mode:
@@ -138,9 +138,14 @@ arm.JoystickControl();
 <br />FindMaxDelta: search and return the array index of the biggest deltaposition. Used for trajectory calculation.
 <br />Input: the deltaPosition[6] array which containt the differences between the the currentPosition and the goalposition
 <br />Output: the array index corresponding to the bigges deltaposition.
-	
-* __void TrajectoryGeneration(float goalPosition[ ], float Vstd, float Astd);__
+
+ _TrajectoryGeneration is outdated, please use TimeProfileGeneration_
+* __void TrajectoryGeneration(float goalPosition[ ], float Vstd, float Astd);__ 
 <br />TrajectoryGeneration: set all motor's profile (velocity/acceleration) based on the current and goal position. Used to generata smooth movement of the arm.
+<br />Input: the goal position array[6] containing the wanted position of the 6 motors, the based velocity-acceleration for each motors
+
+* __void TimeProfileGeneration(float goalPosition[ ], uint32_t stdTa, uint32_t stdTf);__
+<br />TimeProfileGeneration: set the timeprofile of the arm. Used to time the smooth movement of the arm. Currently constant, but maybe implemented as prop of total angular distance
 <br />Input: the goal position array[6] containing the wanted position of the 6 motors, the based velocity-acceleration for each motors
 	
 * __void Goto(float goalPosition[ ], int generateTrajectory, uint32_t Vstd, uint32_t Astd);__
